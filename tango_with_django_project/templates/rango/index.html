@@ -1,0 +1,47 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+	Home
+{% endblock %}
+
+{% block body_block %}
+	<h1>Rango says...</h1>
+	<div>
+		{% if user.is_authenticated %}
+			howdy {{ user.username }}
+		{% else %}
+			hey there partner!
+		{% endif %}
+		<strong>{{ boldmessage }}</strong><br />
+	</div>
+	<p>Number of visits {{ visits }}</p>
+	<h2>Most liked categories</h2>
+	<div>
+		{% if categories %}
+		<ul>
+			{% for category in categories %}
+			<li>
+				<a href="{% url 'rango:show_category' category.slug %}">{{ category.name }}</a>
+			</li>
+			{% endfor %}
+		</ul>
+		{% else %}
+		<strong>There are no categories present.</strong>
+		{% endif %}
+	</div>
+
+	<br />
+	<h2>Most viewed pages</h2>
+	<div>
+		{% if pages %}
+		<ul>
+			{% for page in pages %}
+			<li>
+				<a href="{{ page.url }}">{{ page.title }}</a> - {{ page.views }} view{{ page.views|pluralize }}
+			</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+	</div>
+{% endblock %}
