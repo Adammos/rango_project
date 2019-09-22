@@ -1,0 +1,18 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+	Test cookies
+{% endblock %}
+
+{% block body_block %}
+<p>Display the cookies here: {{ cookie_page_counter }}</p>
+<p>Your cookie username is: {{ username_cookie }}</p>
+	<form id="cookie_form" method="post" action="{% url 'rango:cookie_page' %}">
+		{% csrf_token %}
+		Username: <input type="text" name="username_form" value="" size="50" />
+		<br />
+		<input type="submit" value="submit" />
+	</form>
+
+{% endblock %}

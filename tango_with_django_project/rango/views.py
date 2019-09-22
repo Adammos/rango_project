@@ -8,6 +8,59 @@ from rango.models import Category, Page
 from rango.forms import CategoryForm, PageForm
 from rango.forms import UserForm, UserProfileForm 
 
+def session_page(request):
+	context_dict = {}
+
+	if request.method == 'POST':
+		username_form = request.POST['username_form']
+		request.session['username_session'] = username_form 
+		
+		return redirect(reverse('rango:session_page'))
+
+
+	# GET Method
+	username_session = request.session.get('username_session')
+	context_dict['username_session'] = username_session
+	return render(request, 'rango/session_page.html', context_dict)
+
+def cookie_page(request):
+	''' 
+	Has a page counter cookie and a form to obtain name from user
+	via a cookie and to display it
+	''' 
+	context_dict = {}
+
+	page_counter = int(request.COOKIES.get('cookie_page_counter', 1))
+	context_dict['cookie_page_counter'] = page_counter 
+
+	if request.method == 'POST':
+		username_form = request.POST.get('username_form')
+		username_form = username_form if username_form else 'default name'
+
+		# Update context dict so you can display the information 
+		context_dict['username_cookie'] = username_form
+		
+		# Create response object
+		response = render(request, 'rango/cookie_page.html', context_dict)
+
+		# Update the response object with the new cookie and send it back to the client
+		response.set_cookie('username_cookie', username_form)
+		return response
+
+	# GET METHOD 
+	username_cookie = request.COOKIES.get('username_cookie', 'no name')
+	context_dict['username_cookie'] = username_cookie
+
+	# Create response object
+	response = render(request, 'rango/cookie_page.html', context_dict)
+	
+	# Update the response object with a cookie and send it back to the client
+	page_counter += 1
+	response.set_cookie('cookie_page_counter', str(page_counter))
+
+	return response
+
+
 def get_server_side_cookie(request, cookie, default_val=None):
 	val = request.session.get(cookie)
 	if not val:
