@@ -7,6 +7,19 @@ from datetime import datetime
 from rango.models import Category, Page 
 from rango.forms import CategoryForm, PageForm
 from rango.forms import UserForm, UserProfileForm 
+from rango.bing_search import run_query
+
+def search(request):
+	result_list = []
+	query = ''
+	if request.method == 'POST':
+		query = request.POST['query'].strip()
+		if query:
+			# Run our Bing function to get the results list!
+			result_list = run_query(query)
+
+	return render(request, 'rango/search.html', {'result_list': result_list, 'query_string':query})
+
 
 def session_page(request):
 	context_dict = {}

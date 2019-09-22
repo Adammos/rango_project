@@ -10,6 +10,9 @@ __pycache__/
 *.sublime-project
 *.sublime-workspace
 
+# BING KEY FILE
+bing.key
+
 # Distribution / packaging
 .Python
 build/

@@ -13,4 +13,5 @@ urlpatterns = [
 		views.add_page, name='add_page'),
 	path('cookie_page/', views.cookie_page, name='cookie_page'),
 	path('session_page/', views.session_page, name='session_page'),
+	path('search/', views.search, name='search'),
 ]
