@@ -13,6 +13,56 @@ from rango.bing_search import run_query
 from django.views import View 
 from django.utils.decorators import method_decorator
 
+
+class SearchAddPageView(View):
+	@method_decorator(login_required)
+	def get(self, request):
+		category_id = request.GET['category_id']
+		page_title = request.GET['page_id']
+		page_url = request.GET['page_url']
+
+		# test uknown 
+		#page_test = request.GET['data-page-test']
+
+		# Check whether category exitst
+		try:
+			category = Category.objects.get(id=int(category_id))
+		except Category.DoesNotExist:
+			return HttpResponse('Error - category not found.')
+		except ValueError:
+			return HttpResponse('Error - bad category ID.')
+
+		# Add the page to category if it does not exist yet
+		page = Page.objects.get_or_create(category=category, title=page_title, url=page_url)
+			
+		pages = Page.objects.filter(category=category).order_by('-views')	
+		return render(request, 'rango/page_listing.html', {'pages':pages})
+
+
+
+def get_category_list(max_results=0, starts_with=''):
+	category_list = []
+
+	if starts_with:
+		category_list = Category.objects.filter(name__istartswith=starts_with)
+
+	if max_results > 0:
+		if len(category_list) > max_results:
+			category_list = category_list[:max_results]
+
+	return category_list 
+
+
+class CategorySuggestionView(View):
+	def get(self, request):
+		suggestion = request.GET['suggestion']
+		category_list = get_category_list(max_results=8, starts_with=suggestion)
+
+		if len(category_list) == 0:
+			category_list = Category.objects.order_by('-likes')
+
+		return render(request, 'rango/categories.html', {'categories': category_list})
+
 class LikeCategoryView(View):
 	@method_decorator(login_required)
 	def get(self, request):

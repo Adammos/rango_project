@@ -9,5 +9,31 @@ $(document).ready(function() {
 				$('#like_btn').hide();
 			})
 	});
-		
+
+	$("#search-input").keyup(function() {
+		var query;
+		query = $(this).val();
+
+		$.get('/rango/suggest/', {'suggestion': query},
+			function(data) {
+				$('#categories-listing').html(data);
+			})
+	});
+
+	$('.rango-page-add').click(function() {
+		var page_id = $(this).attr('data-page-id');
+		var page_url = $(this).attr('data-page-url');
+		var category_id = $(this).attr('data-category-id');
+		var clickedButton = $(this);
+
+		$.get('/rango/search_add_page/', 
+			{'category_id': category_id,
+			'page_id': page_id,
+			'page_url': page_url},
+			function(data) {
+				$('#category-pages-list').html(data);
+				clickedButton.hide();
+			})
+	});
+
 });
