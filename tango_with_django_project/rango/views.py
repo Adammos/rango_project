@@ -13,6 +13,9 @@ from rango.bing_search import run_query
 from django.views import View 
 from django.utils.decorators import method_decorator
 
+class GuessNumberView(View):
+	def get(self, request):
+		return render(request, 'rango/guess_number_game.html')
 
 class SearchAddPageView(View):
 	@method_decorator(login_required)
