@@ -1,0 +1,27 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+
+{% block head_block %}
+<style>
+</style>
+{% endblock %}
+
+{% block title_block %}
+Bouncing balls
+{% endblock %}
+
+{% block body_block %}
+<div class="jumbotron p-4">
+	<div class="container">
+		<h1 class="jumbotron-heading">Bouncing Balls</h1>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row">
+		 <canvas></canvas>
+
+	    <script src="{% static 'js/bouncing_balls.js' %}"></script>
+	</div>
+</div>
+{% endblock %}
