@@ -9,6 +9,8 @@
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.5">
     <link rel="icon" href="{% static 'images/favicon.ico' %}">
+    {% block head_block %}
+    {% endblock %}
     <title>
         Rango - {% block title_block %}How to Tango with Django!{% endblock %}
     </title>
@@ -42,6 +44,7 @@
                         <li class="nav-item "><a class="nav-link" href="{% url 'auth_login' %}">Login</a></li>
                         {% endif %}
                         <li class='nav-item'><a class="nav-link" href="{% url 'rango:guess_number_game' %}">Play Game</a></li>
+                        <li class='nav-item'><a class='nav-link' href="{% url 'rango:random_tiles' %}">Random Tiles</a></li>
                     </ul>
                 </div>
             </nav>

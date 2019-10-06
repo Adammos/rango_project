@@ -22,4 +22,5 @@ urlpatterns = [
 	path('suggest/', views.CategorySuggestionView.as_view(), name='suggest'),
 	path('search_add_page/', views.SearchAddPageView.as_view(), name='search_add_page'),
 	path('guess_number_game/', views.GuessNumberView.as_view(), name='guess_number_game'),
+	path('random_tiles/', views.RandomTiles.as_view(), name='random_tiles'),
 ]

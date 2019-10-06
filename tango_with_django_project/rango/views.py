@@ -17,6 +17,10 @@ class GuessNumberView(View):
 	def get(self, request):
 		return render(request, 'rango/guess_number_game.html')
 
+class RandomTiles(View):
+	def get(self, request):
+		return render(request, 'rango/random_tiles.html')
+
 class SearchAddPageView(View):
 	@method_decorator(login_required)
 	def get(self, request):

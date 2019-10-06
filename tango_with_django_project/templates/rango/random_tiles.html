@@ -1,0 +1,58 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+
+{% block head_block %}
+<style>
+      div .tile{
+        background-color: red;
+        height: 100px;
+        width: 25%;
+        float: left;
+      }
+</style>
+{% endblock %}
+
+{% block title_block %}
+Random Tiles
+{% endblock %}
+
+
+{% block body_block %}
+<div class="jumbotron p-4">
+	<div class="container">
+		<h1 class="jumbotron-heading">Random Tiles</h1>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row tiles">
+	<script>
+	  var divParent = document.querySelector('.tiles');
+
+      for(var i = 1; i <= 16; i++) {
+        var myDiv = document.createElement('div');
+        myDiv.setAttribute('class', 'tile');
+        divParent.appendChild(myDiv);
+      }
+
+      function random(number) {
+        return Math.floor(Math.random()*number);
+      }
+
+      function bgChange() {
+        var rndCol = 'rgb(' + random(255) + ',' + random(255) + ',' + random(255) + ')';
+        return rndCol;
+      }
+
+      var divs = document.querySelectorAll('.tile');
+
+      for(var i = 0; i < divs.length; i++) {
+        divs[i].onclick = function(e) {
+          e.target.style.backgroundColor = bgChange();
+        }
+      }
+    </script>
+</div>
+</div>
+
+{% endblock %}
