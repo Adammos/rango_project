@@ -8,16 +8,16 @@
 {% block body_block %}
 	<div class="jumbotron p-4">
 		<div class="container">
-			<h1 class="jumbotron-heading">Rango says...</h1>
+			<h1 class="jumbotron-heading">Jarek Pacek's Playground</h1>
 			<div>
-				<h2 class="h2">
+				<strong>
 					{% if user.is_authenticated %}
-						howdy {{ user.username }}!
+						Hello {{ user.username }}! Welcome back!
 					{% else %}
-						hey there partner!
+						Hey there! Please <a href="{% url 'registration_register' %}">register</a> and <a href="{% url 'auth_login' %}">log in</a>
 					{% endif %}
-				</h2>
-				<strong>{{ boldmessage }}</strong>
+				</strong>
+				<strong style="display:none">{{ boldmessage }}</strong>
 			</div>
 		</div>
 	</div>
