@@ -26,14 +26,15 @@ class RandomTiles(View):
 		return render(request, 'rango/random_tiles.html')
 
 class SearchAddPageView(View):
+	'''
+	AJAX view with get method that adss a Page model object into the Category model object. 
+	Returns html with just the Page listing.
+	'''
 	@method_decorator(login_required)
 	def get(self, request):
 		category_id = request.GET['category_id']
 		page_title = request.GET['page_id']
 		page_url = request.GET['page_url']
-
-		# test uknown 
-		#page_test = request.GET['data-page-test']
 
 		# Check whether category exitst
 		try:
@@ -52,6 +53,9 @@ class SearchAddPageView(View):
 
 
 def get_category_list(max_results=0, starts_with=''):
+	'''
+	Help function for the Category "Sugestion" functionality. Returns list of Category model objects.
+	'''
 	category_list = []
 
 	if starts_with:
@@ -65,6 +69,10 @@ def get_category_list(max_results=0, starts_with=''):
 
 
 class CategorySuggestionView(View):
+	'''
+	AJAX view with get method to process the search input from the user
+	and return the list of Categories that are matching the search.
+	'''
 	def get(self, request):
 		suggestion = request.GET['suggestion']
 		category_list = get_category_list(max_results=8, starts_with=suggestion)
@@ -75,6 +83,10 @@ class CategorySuggestionView(View):
 		return render(request, 'rango/categories.html', {'categories': category_list})
 
 class LikeCategoryView(View):
+	'''
+	AJAX view with get method to process the "like" Category button. Get method
+	receives the category id, increases the num of likes which also returns.
+	'''
 	@method_decorator(login_required)
 	def get(self, request):
 		category_id = request.GET['category_id']
@@ -92,6 +104,9 @@ class LikeCategoryView(View):
 		return HttpResponse(category.likes)
 
 class ListProfilesView(View):
+	'''
+	Returns response with list of all users.
+	'''
 	@method_decorator(login_required)
 	def get(self, request):
 		profiles = UserProfile.objects.all()
@@ -99,7 +114,15 @@ class ListProfilesView(View):
 		return render(request, 'rango/list_profiles.html', {'userprofile_list': profiles})
 
 class ProfileView(View):
+	'''
+	Form processing view with both Get and Post methods to display the requested
+	user information or to update it.
+	'''
 	def get_user_details(self, username):
+		'''
+		Helper method, returns the passed user and userprofile module objects
+		given in the parameter as username.
+		'''
 		try:
 			user = User.objects.get(username=username)
 		except User.DoesNotExist:
@@ -107,12 +130,17 @@ class ProfileView(View):
 			return None
 
 		userprofile = UserProfile.objects.get_or_create(user=user)[0]
+
+		# Create a form object and fill it with the users information
 		form = UserProfileForm({'website': userprofile.website,
 								'picture': userprofile.picture})
 		return (user, userprofile, form)
 
 	@method_decorator(login_required)
 	def get(self, request, username):
+		''' 
+		Get method returns response with the requested user, userprofile and form object.
+		'''
 		try:
 			(user, userprofile, form) = self.get_user_details(username)
 		except TypeError:
@@ -125,6 +153,11 @@ class ProfileView(View):
 
 	@method_decorator(login_required)
 	def post(self, request, username):
+		'''
+		Post method receives user form data posted by the user. 
+		The data are filled in a user profile form, validated and then saved.
+		Method redirects the user to the index page.
+		'''
 		try:
 			(user, userprofile, form) = self.get_user_details(username)
 		except TypeError:
@@ -142,6 +175,7 @@ class ProfileView(View):
 		else:
 			print(form.errors)
 
+		# The posted data are invalid, return them in the form
 		context_dict = {'userprofile': userprofile,
 						'selecteduser': user,
 						'form': form}
@@ -179,7 +213,11 @@ def register_profile(request):
 	context_dict = {'form': form}
 	return render(request, 'rango/profile_registration.html', context_dict)
 '''
+
 class RegisterProfileView(View):
+	'''
+	Step 2 registration.
+	'''
 	@method_decorator(login_required)
 	def post(self, request):
 		form = UserProfileForm(request.POST, request.FILES)
@@ -220,6 +258,11 @@ def goto_url(request):
 '''
 
 class GoToView(View):
+	'''
+	Every page in the category when clicked sends Get request to this view
+	with the page id's as a parameter. The view increments the views attribute
+	of the page's model object.
+	'''
 	def get(self, request):
 		page_id = request.GET.get('page_id')
 		if not page_id:
@@ -254,8 +297,8 @@ def session_page(request):
 	context_dict = {}
 
 	if request.method == 'POST':
-		username_form = request.POST['username_form']
-		request.session['username_session'] = username_form 
+		name = request.POST['username_form']
+		request.session['username_session'] = name 
 		
 		return redirect(reverse('rango:session_page'))
 

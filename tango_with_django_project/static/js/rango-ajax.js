@@ -10,6 +10,7 @@ $(document).ready(function() {
 			})
 	});
 
+	// Category search suggestions 
 	$("#search-input").keyup(function() {
 		var query;
 		query = $(this).val();
@@ -20,6 +21,7 @@ $(document).ready(function() {
 			})
 	});
 
+	// Adding a new Page model object to the Category
 	$('.rango-page-add').click(function() {
 		var page_id = $(this).attr('data-page-id');
 		var page_url = $(this).attr('data-page-url');
