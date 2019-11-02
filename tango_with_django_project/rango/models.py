@@ -28,6 +28,16 @@ class Page(models.Model):
 	def __str__(self):
 		return self.title 
 
+class Comment(models.Model):
+	author = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
+	body = models.TextField()
+	created_on = models.DateTimeField(auto_now_add=True)
+
+	# Only one way relationship with Category (many to one)
+	# Many comments can be assigned to one Category
+	category = models.ForeignKey('Category', on_delete=models.CASCADE)
+
+
 class UserProfile(models.Model):
 	# This line is required. Links UserProfile to a User model instance.
 	user = models.OneToOneField(User, on_delete=models.CASCADE)

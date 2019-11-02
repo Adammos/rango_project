@@ -56,8 +56,8 @@
 			<form class="form-inline" id="user-form" method="post" action="{% url 'rango:show_category' category.slug %}">
 				{% csrf_token %}
 				<div class="form-group">
-					<input class="form-control" type="text" size="50" name="query" id="query" value="{{ query_string }}" />
-				</div>
+					<input class="form-control" placeholder="Find your page on the web" type="text" size="50" name="query" id="query" value="{{ query_string }}" />
+				</div>&nbsp;
 				<button class="btn btn-primary" type="submit" name="submit">Search</button>
 			</form>
 		</div>
@@ -83,6 +83,41 @@
 				</div>
 			{% endif %}	<!-- if result_list -->
 		</div>
-	{% endif %} <!-- user.is_authenticated -->	
+
+		<br>
+		<br>
+
+		<div> <!-- Comment section -->
+			
+			<h4>Leave a comment:</h4>
+			<form action="{% url 'rango:show_category' category.slug %}" method="post">
+				{% csrf_token %}
+				<div class="form-group">
+					{{ form.body }}
+				</div>
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+			<br><br>
+		</div> <!-- end of Comment section -->
+	{% endif %} <!-- user is authenticated -->
+		<div>
+			{% if comments %}
+				<h4>Comments:</h4>
+				{% for comment in comments %}
+					<p>
+						<a href="{% url 'rango:profile' comment.author.user.username %}">
+						<img src="{{ MEDIA_URL }}{{ comment.author.picture }}"
+							width="30"
+							height="30" />&nbsp;
+							<b>{{ comment.author.user.username }}</b></a>
+							wrote on {{ comment.created_on.date }}:
+					</p>
+					<p>{{ comment.body }}</p>
+					<hr>
+				{% endfor %}
+			{% endif %}
+		</div>
+
+		
 </div>
 {% endblock %}

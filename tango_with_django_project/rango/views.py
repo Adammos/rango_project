@@ -6,8 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User 
 
 from datetime import datetime 
-from rango.models import Category, Page, UserProfile
-from rango.forms import CategoryForm, PageForm
+from rango.models import Category, Page, Comment, UserProfile
+from rango.forms import CategoryForm, PageForm, CommentForm
 from rango.forms import UserForm, UserProfileForm 
 from rango.bing_search import run_query
 from django.views import View 
@@ -491,8 +491,14 @@ class ShowCategoryView(View):
 		try:
 			category = Category.objects.get(slug=category_name_slug)
 			pages = Page.objects.filter(category=category).order_by('-views')
+			comments = Comment.objects.filter(category=category).order_by('-created_on')
+
+			form = CommentForm()
+
 			context_dict['category'] = category
-			context_dict['pages'] = pages 
+			context_dict['pages'] = pages
+			context_dict['comments'] = comments 
+			context_dict['form'] = form
 		except Category.DoesNotExist:
 			pass
 		return context_dict
@@ -503,11 +509,26 @@ class ShowCategoryView(View):
 
 	def post(self, request, category_name_slug):
 		context_dict = self.get_context_dict(category_name_slug)
-		query = request.POST['query'].strip()
+
+		
+		#query = request.POST['query'].strip()
+		query = request.POST.get('query')
 		if query:
+			query = query.strip()
 			result_list = run_query(query)
 			context_dict['result_list'] = result_list
 			context_dict['query_string'] = query
+
+		form = CommentForm(request.POST)
+		if form.is_valid():
+			userprofile = UserProfile.objects.get(user=request.user)
+			category = context_dict['category']
+			comment = Comment(author=userprofile, 
+				body=form.cleaned_data['body'],
+				category=category)
+			comment.save()
+			comments = Comment.objects.filter(category=category).order_by('-created_on')
+			context_dict['comments'] = comments	
 		return render(request, 'rango/category.html', context_dict)
 
 '''
