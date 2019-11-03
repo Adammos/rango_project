@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load staticfiles %}
+{% load static %}
 {% load rango_template_tags %}
 <html lang="en">
     <head>
@@ -9,15 +10,17 @@
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.5">
     <link rel="icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     {% block head_block %}
     {% endblock %}
     <title>
-        Rango - {% block title_block %}How to Tango with Django!{% endblock %}
+        Jarek - {% block title_block %}{% endblock %}
     </title>
     
     <!-- Bootstrap core CSS -->
     <link href="https://getbootstrap.com/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     
+
     <!-- Custom styles for this template -->
     <link href="https://getbootstrap.com/docs/4.2/examples/dashboard/dashboard.css" rel="stylesheet">
     </head>
@@ -25,42 +28,62 @@
     <body>
         <header>
             <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark p-0">
-                <a class="navbar-brand p-2" href="{% url 'rango:index' %}">Rango</a>
+                
+                <ul class="navbar-nav mr-auto">
+
+                    <li class="nav-item"><a class="nav-link" href="{% url 'rango:index' %}">
+                        <i class="fa fa-home"></i>&nbsp;Home</a></li>
+                    <li class="nav-item d-block d-md-none"><a class="nav-link" onclick="toggleBar()" href="#">
+                        <i class="fa fa-list"></i>&nbsp;Categories</a></li>
+                </ul>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item"><a class="nav-link" href="{% url 'rango:index' %}">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'rango:about' %}">About</a></li>
                         {% if user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'rango:add_category' %}">Add Category</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'rango:profile' user.username %}">Profile</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'rango:list_profiles' %}">List Profiles</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'auth_logout' %}?next=/rango/">Logout</a></li>                     
-                        {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'registration_register' %}">Register Here</a></li>
-                        <li class="nav-item "><a class="nav-link" href="{% url 'auth_login' %}">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'rango:add_category' %}">
+                            <i class="fa fa-plus-square"></i>&nbsp;Add Category</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'rango:list_profiles' %}">
+                            <i class="fa fa-address-book"></i>&nbsp;List Profiles</a></li>
                         {% endif %}
 
-                         
-
-                        <li class='nav-item'><a class="nav-link" href="{% url 'rango:guess_number_game' %}">Play Game</a></li>
-                        <li class='nav-item'><a class='nav-link' href="{% url 'rango:random_tiles' %}">Random Tiles</a></li>
-                        <li class='nav-item'><a class='nav-link' href="{% url 'rango:bouncing_balls' %}">Bouncing Balls</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-gamepad"></i>&nbsp;Games<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'rango:guess_number_game' %}">Guess A Number</a></li>
+                                <li><a href="{% url 'rango:random_tiles' %}">Random Tiles</a></li>
+                                <li><a href="{% url 'rango:bouncing_balls' %}">Bouncing Balls</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'rango:about' %}">
+                            <i class="fa fa-question-circle"></i>&nbsp;About</a></li>
+                    </ul>
+                    <ul class="navbar-nav navbar-right">
+                        {% if user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'rango:profile' user.username %}">
+                            <i class="fa fa-user"></i>&nbsp;Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'auth_logout' %}?next=/rango/">
+                            <i class="fa fa-sign-out"></i>&nbsp;Logout</a></li>
+                        {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'registration_register' %}">Sign Up</a></li>
+                        <li class="nav-item "><a class="nav-link" href="{% url 'auth_login' %}">
+                            <i class="fa fa-sign-in"></i>&nbsp;Login</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </nav>
         </header>
-        
+
         <div class="container-fluid">
             <div class="row">
-                <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-                	<div class="w-75 ml-3">
-                		<input type="search" id="search-input" class="form-control ds-input"
-                			placeholder="Search..." />
-                	</div>
+                <nav id="mySidebar" class="col-md-2 d-none d-md-block bg-light sidebar">
+                    <div class="w-75 ml-3">
+                        <input type="search" id="search-input" class="form-control ds-input"
+                            placeholder="Search..." />
+                    </div>
 
                     <div class="sidebar-sticky" id="categories-listing">
                     
@@ -69,7 +92,7 @@
                     </div>
                 </nav>
                 
-                <main role="main" class="col-md-9  ml-sm-auto col-lg-10 px-4">      
+                <main id="main_content" role="main" class="col-md-9  ml-sm-auto col-lg-10 px-4">      
                     {% block body_block %}{% endblock %}
                     
                     <!-- FOOTER -->
@@ -80,7 +103,7 @@
                 </main>
             </div>
         </div>
-        
+
         <!-- Bootstrap core JavaScript -->
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="{% static 'js/jquery-3.3.1.min.js' %}" crossorigin="anonymous"></script>
@@ -89,5 +112,6 @@
         <script>window.jQuery || document.write('<script src="https://getbootstrap.com/docs/4.2/assets/js/vendor/jquery-slim.min.js"><\/script>')</script><script src="https://getbootstrap.com/docs/4.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-zDnhMsjVZfS3hiP7oCBRmfjkQC4fzxVxFhBx8Hkz2aZX8gEvA/jsP3eXRCvzTofP" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
         <script src="https://getbootstrap.com/docs/4.2/examples/dashboard/dashboard.js"></script>
+        <script src="{% static 'js/subnav.js' %}"></script>
     </body>
 </html>

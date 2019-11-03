@@ -56,7 +56,7 @@
 			<form class="form-inline" id="user-form" method="post" action="{% url 'rango:show_category' category.slug %}">
 				{% csrf_token %}
 				<div class="form-group">
-					<input class="form-control" placeholder="Find your page on the web" type="text" size="50" name="query" id="query" value="{{ query_string }}" />
+					<input class="form-control" placeholder="Look for a page on the web" type="text" size="50" name="query" id="query" value="{{ query_string }}" />
 				</div>&nbsp;
 				<button class="btn btn-primary" type="submit" name="submit">Search</button>
 			</form>

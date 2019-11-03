@@ -8,7 +8,7 @@
 {% block body_block %}
 	<div class="jumbotron p-4">
 		<div class="container">
-			<h1 class="jumbotron-heading">Jarek Pacek's Playground</h1>
+			<h1 class="jumbotron-heading">Jarek's Web Catalog</h1>
 			<div>
 				<strong>
 					{% if user.is_authenticated %}
@@ -23,8 +23,10 @@
 	</div>
 
 	
-	<p>Number of visits {{ visits }}</p>
-
+	<p style="display:none">Number of visits {{ visits }}</p>
+	<div class="container">
+		<p>Browse around the categories and find out about some of the interesting web pages added by other users. Registered users are free to add their favourite pages to the categories and also to create new categories.</p>
+	</div>
 
 	<div class="container">
 		<div class="row">
