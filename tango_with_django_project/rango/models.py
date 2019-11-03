@@ -35,7 +35,7 @@ class Comment(models.Model):
 
 	# Only one way relationship with Category (many to one)
 	# Many comments can be assigned to one Category
-	category = models.ForeignKey('Category', on_delete=models.CASCADE)
+	category = models.ForeignKey('Category', null=True, on_delete=models.CASCADE)
 
 
 class UserProfile(models.Model):

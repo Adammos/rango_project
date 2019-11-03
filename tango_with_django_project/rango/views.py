@@ -531,6 +531,31 @@ class ShowCategoryView(View):
 			context_dict['comments'] = comments	
 		return render(request, 'rango/category.html', context_dict)
 
+
+class CommentsView(View):
+	def get_context_dict(self):
+		comments = Comment.objects.filter(category=None).order_by('-created_on')
+		form = CommentForm()
+		context_dict = {'comments': comments, 'form': form}
+		return context_dict 
+
+	def get(self, request):
+		context_dict = self.get_context_dict()
+		return render(request, 'rango/comments.html', context_dict)
+
+	def post(self, request):
+		context_dict = self.get_context_dict()
+		form = CommentForm(request.POST)
+		if form.is_valid():
+			userprofile = UserProfile.objects.get(user=request.user)
+			comment = Comment(author=userprofile,
+				body=form.cleaned_data['body'],
+				category=None)
+			comment.save()
+			comments = Comment.objects.filter(category=None).order_by('-created_on')
+			context_dict['comments'] = comments 
+		return render(request, 'rango/comments.html', context_dict)
+
 '''
 def add_category(request):
 	form = CategoryForm()

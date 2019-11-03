@@ -1,0 +1,48 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+	Comments
+{% endblock %}
+
+{% block body_block %}
+	<div class="jumbotron p-4">
+		<div class="container">
+			<h1 class="jumbotron-heading">Comment section</h1>
+			<small>You must be logged in to comment</small>	
+		</div>
+	</div>
+
+	{% if user.is_authenticated %}
+		<div> <!-- Comment section -->
+		
+		<h4>Leave a comment:</h4>
+		<form action="{% url 'rango:comments' %}" method="post">
+			{% csrf_token %}
+			<div class="form-group">
+				{{ form.body }}
+			</div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+		<br><br>
+	</div> <!-- end of Comment section -->
+	{% endif %}
+
+	<div>
+	{% if comments %}
+		<h4>Comments:</h4>
+		{% for comment in comments %}
+			<p>
+				<a href="{% url 'rango:profile' comment.author.user.username %}">
+				<img src="{{ MEDIA_URL }}{{ comment.author.picture }}"
+					width="30"
+					height="30" />&nbsp;
+					<b>{{ comment.author.user.username }}</b></a>
+					wrote on {{ comment.created_on.date }}:
+			</p>
+			<p>{{ comment.body }}</p>
+			<hr>
+		{% endfor %}
+	{% endif %}
+	</div>
+{% endblock %}
