@@ -24,5 +24,6 @@ urlpatterns = [
 	path('guess_number_game/', views.GuessNumberView.as_view(), name='guess_number_game'),
 	path('random_tiles/', views.RandomTiles.as_view(), name='random_tiles'),
 	path('bouncing_balls/', views.BouncingBallsView.as_view(), name='bouncing_balls'),
-	path('comments', views.CommentsView.as_view(), name='comments'),
+	path('comments/', views.CommentsView.as_view(), name='comments'),
+	path('privacy/', views.PrivacyView.as_view(), name='privacy'),
 ]

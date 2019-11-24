@@ -65,6 +65,8 @@
                             <i class="fa fa-comments"></i>&nbsp;Comments</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'rango:about' %}">
                             <i class="fa fa-question-circle"></i>&nbsp;About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'rango:privacy' %}">
+                            <i class="fa fa-list"></i>&nbsp;Privacy</a></li>
                     </ul>
                     <ul class="navbar-nav navbar-right">
                         {% if user.is_authenticated %}

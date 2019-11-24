@@ -13,6 +13,10 @@ from rango.bing_search import run_query
 from django.views import View 
 from django.utils.decorators import method_decorator
 
+class PrivacyView(View):
+	def get(self, request):
+		return render(request, 'rango/privacy.html')
+
 class BouncingBallsView(View):
 	def get(self, request):
 		return render(request, 'rango/bouncing_balls.html')
