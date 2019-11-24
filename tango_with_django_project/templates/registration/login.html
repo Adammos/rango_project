@@ -1,5 +1,6 @@
 {% extends 'rango/base.html' %}
-
+{% load socialaccount %}
+{% load static %}
 {% block title_block %}
 	Login
 {% endblock %}
@@ -22,5 +23,23 @@
 			<button class="btn btn-lg btn-primary btn-block" type="submit"
 				value="Submit">Sign in</button>
 		</form>
+	</div>
+	<br />
+	<div class="row justify-content-center">
+		<p>Or Log in using your existing account from:</p>
+
+	</div>
+	<div class="row justify-content-center">
+		<div class="col-auto">
+			<p>
+				<a href="{% provider_login_url 'github' %}">GitHub&nbsp;<img height="25" width="25" src="{% static 'images/github.svg' %}"></a>
+			</p>
+			<p>
+				<a href="{% provider_login_url 'google' %}">Google&nbsp;<img height="25" width="25" src="{% static 'images/google.png' %}"></a>
+			</p>
+			<p>
+				<a href="{% provider_login_url 'facebook' %}">Facebook&nbsp;<img height="25" width="25" src="{% static 'images/facebook.png' %}"></a>
+			</p>
+		</div>
 	</div>
 {% endblock %}
